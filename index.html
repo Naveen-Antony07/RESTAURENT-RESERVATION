@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Reservations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="number"], input[type="time"] {
+            margin-bottom: 10px;
+            padding: 8px;
+            width: 200px;
+        }
+        button {
+            padding: 8px 12px;
+        }
+        .reservations-list {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Restaurant Reservations</h1>
+
+    <div class="form-container">
+        <input type="text" id="name" placeholder="Customer Name" required><br>
+        <input type="number" id="guests" placeholder="Number of Guests" required><br>
+        <input type="time" id="time" placeholder="Reservation Time" required><br>
+        <button onclick="addReservation()">Add Reservation</button>
+    </div>
+
+    <h2>Current Reservations</h2>
+    <div class="reservations-list" id="reservations-list">
+        
+    </div>
+
+    <script>
+        const reservations = [];
+
+        
+        function addReservation() {
+            const name = document.getElementById('name').value;
+            const guests = document.getElementById('guests').value;
+            const time = document.getElementById('time').value;
+
+            if (name && guests && time) {
+                const reservation = {
+                    name: name,
+                    guests: guests,
+                    time: time
+                };
+
+                reservations.push(reservation);
+                document.getElementById('name').value = ''; 
+                document.getElementById('guests').value = '';
+                document.getElementById('time').value = '';
+
+                displayReservations();
+            } else {
+                alert("Please fill out all fields.");
+            }
+        }
+
+        
+        function displayReservations() {
+            const reservationsList = document.getElementById('reservations-list');
+            reservationsList.innerHTML = ''; 
+
+            if (reservations.length === 0) {
+                reservationsList.innerHTML = '<p>No reservations found.</p>';
+            } else {
+                reservations.forEach((res, index) => {
+                    const resDiv = document.createElement('div');
+                    resDiv.innerHTML = `${index + 1}. <strong>${res.name}</strong>, ${res.guests} guests at ${res.time} 
+                        <button onclick="removeReservation(${index})">Remove</button>`;
+                    reservationsList.appendChild(resDiv);
+                });
+            }
+        }
+
+        
+        function removeReservation(index) {
+            reservations.splice(index, 1);
+            displayReservations(); 
+        }
+    </script>
+
+</body>
+</html>
